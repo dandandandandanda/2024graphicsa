@@ -1,21 +1,23 @@
 #include <GL/glut.h>
+#include <math.h>
+
+
+void myCircle(float x, float y, float r){
+    glBegin(GL_POLYGON);///start
+    for(float a=0; a<=3.1415*2; a+=0.1){
+        glVertex2f( r*cos(a)+x, r*sin(a)+y );
+    }
+    glEnd();///end
+}
 void display()
 {
-	glBegin(GL_POLYGON);///start
-	///(r,g,b) ,頂點位置
-    glVertex2f((34-200)/200.0, -(76-200)/200.0);
-    glVertex2f((48-200)/200.0, -(131-200)/200.0);
-    glVertex2f((85-200)/200.0, -(59-200)/200.0);
-    glEnd();///end
-	///(r,g,b) ,頂點位置
-	glBegin(GL_POLYGON);
-    glVertex2f((383-200)/200.0, -(79-200)/200.0);
-    glVertex2f((348-200)/200.0, -(146-200)/200.0);
-    glVertex2f((312-200)/200.0, -(55-200)/200.0);
-    glEnd();///end
-
-	glutSwapBuffers();
+    myCircle( 0.5 , 0.5 , 0.3);
+    myCircle( -0.5 , 0.5 , 0.3);
+    myCircle( 0 , -0.1 , 0.6);
+    glutSwapBuffers();
 }
+
+
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
