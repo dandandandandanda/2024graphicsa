@@ -1,21 +1,21 @@
-#include <opencv/highgui.h> ///®œ•Œ OpenCV 2.1 §Ò∏˚¬≤≥Ê, •u≠n•Œ High GUI ßY•i
+#include <opencv/highgui.h> ///‰ΩøÁî® OpenCV 2.1 ÊØîËºÉÁ∞°ÂñÆ, Âè™Ë¶ÅÁî® High GUI Âç≥ÂèØ
 #include <opencv/cv.h>
 #include <GL/glut.h>
 
-GLUquadric * quad = NULL; ///todo: ≠n¶≥§@¡˚´¸º–
-int id1, id2; //§¿∂}∂Kπœ
+GLUquadric * quad = NULL; ///todo: Ë¶ÅÊúâ‰∏ÄÈ°ÜÊåáÊ®ô
+int id1, id2; //ÂàÜÈñãË≤ºÂúñ
 int myTexture(char * filename)
 {
-    IplImage * img = cvLoadImage(filename); ///OpenCV≈™πœ
-    cvCvtColor(img,img, CV_BGR2RGB); ///OpenCV¬‡¶‚±m (ª›≠ncv.h)
-    glEnable(GL_TEXTURE_2D); ///1. ∂}±“∂Kπœ•\Ø‡
-    GLuint id; ///∑«≥∆§@≠” unsigned int æ„º∆, •s ∂KπœID
-    glGenTextures(1, &id); /// ≤£•ÕGenerate ∂KπœID
-    glBindTexture(GL_TEXTURE_2D, id); ///∏j©wbind ∂KπœID
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); /// ∂Kπœ∞—º∆, ∂WπL•]∏À™∫ΩdπœT, ¥N≠´¬–∂Kπœ
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); /// ∂Kπœ∞—º∆, ∂WπL•]∏À™∫ΩdπœS, ¥N≠´¬–∂Kπœ
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); /// ∂Kπœ∞—º∆, ©Ò§jÆ…™∫§∫¥°, •Œ≥Ã™Ò¬I
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); /// ∂Kπœ∞—º∆, ¡Y§pÆ…™∫§∫¥°, •Œ≥Ã™Ò¬I
+    IplImage * img = cvLoadImage(filename); ///OpenCVËÆÄÂúñ
+    cvCvtColor(img,img, CV_BGR2RGB); ///OpenCVËΩâËâ≤ÂΩ© (ÈúÄË¶Åcv.h)
+    glEnable(GL_TEXTURE_2D); ///1. ÈñãÂïüË≤ºÂúñÂäüËÉΩ
+    GLuint id; ///Ê∫ñÂÇô‰∏ÄÂÄã unsigned int Êï¥Êï∏, Âè´ Ë≤ºÂúñID
+    glGenTextures(1, &id); /// Áî¢ÁîüGenerate Ë≤ºÂúñID
+    glBindTexture(GL_TEXTURE_2D, id); ///Á∂ÅÂÆöbind Ë≤ºÂúñID
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); /// Ë≤ºÂúñÂèÉÊï∏, Ë∂ÖÈÅéÂåÖË£ùÁöÑÁØÑÂúñT, Â∞±ÈáçË¶ÜË≤ºÂúñ
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); /// Ë≤ºÂúñÂèÉÊï∏, Ë∂ÖÈÅéÂåÖË£ùÁöÑÁØÑÂúñS, Â∞±ÈáçË¶ÜË≤ºÂúñ
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); /// Ë≤ºÂúñÂèÉÊï∏, ÊîæÂ§ßÊôÇÁöÑÂÖßÊèí, Áî®ÊúÄËøëÈªû
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); /// Ë≤ºÂúñÂèÉÊï∏, Á∏ÆÂ∞èÊôÇÁöÑÂÖßÊèí, Áî®ÊúÄËøëÈªû
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->width, img->height, 0, GL_RGB, GL_UNSIGNED_BYTE, img->imageData);
     return id;
 }
@@ -263,6 +263,16 @@ void keyboard(unsigned char key, int x, int y){
     if(key=='7') angleID= 7;
     if(key=='8') angleID= 8;
     if(key=='9') angleID= 9;
+    if(key=='a') angleID= 111;
+    if(key=='x') angleID= 11;
+    if(key=='c') angleID= 12;
+    if(key=='v') angleID= 13;
+    if(key=='b') angleID= 14;
+    if(key=='n') angleID= 15;
+    if(key=='m') angleID= 16;
+    if(key==',') angleID= 17;
+    if(key=='.') angleID= 18;
+    if(key=='/') angleID= 19;
 }
 
 void display()
@@ -275,14 +285,15 @@ void display()
     //glutSolidSphere(0.1,30,30);
     glPushMatrix();
         glRotatef(angleX[0], 1, 0 ,0);
-        glRotatef(angleY[0], 0, 1 ,0);
+        glRotatef(angleY[111], 0, 1 ,0);
         drawbody();
         glEnable(GL_TEXTURE_2D);
         glColor3f(1,1,1);
+
         glPushMatrix();
             glTranslatef(0, -0.05, 0.3);
             glRotatef(angleX[1], 1, 0, 0);
-            glRotatef(angleY[1], 0, 0, 1);
+            glRotatef(angleY[11], 0, 0, 1);
             glTranslatef(0, 1.17, 0);
             glScalef(2.0f, 2.0f, 2.0f);
             drawHead(); //glutSolidTeapot( 0.3 );
@@ -290,14 +301,14 @@ void display()
         glPushMatrix();
             glTranslatef(0.35, 0.73, -0.75);
             glRotatef(angleX[2], 1, 0, 1);
-            glRotatef(angleY[2], 0, 1, 0);
+            glRotatef(angleY[12], 0, 1, 0);
             glTranslatef(0, -0.07, 1);
             glScalef(1.8f, 1.8f, 1.8f);
             drawRightArm();
             glPushMatrix();
                 glTranslatef(0.16, 0.06, -0.94);
                 glRotatef(angleX[3], 1, 0, 0);
-                glRotatef(angleY[3], 1, 0, 0);
+                glRotatef(angleY[13], 1, 0, 0);
                 glTranslatef(0, -0.21, 1);
                 glScalef(0.8f, 0.8f, 0.8f);
                 drawRightHand(); //glutSolidTeapot( 0.3 );
@@ -306,14 +317,14 @@ void display()
         glPushMatrix();
             glTranslatef(-1.33, 0.73, 0.25);
             glRotatef(angleX[4], 1, 0, 1);
-            glRotatef(angleY[4], 0, 1, 0);
+            glRotatef(angleY[14], 0, 1, 0);
             glTranslatef(1, -0.07, 0);
             glScalef(1.8f, 1.8f, 1.8f);
             drawLeftArm();
             glPushMatrix();
                 glTranslatef(-1.15, -0.36, 0.05);
                 glRotatef(angleX[5], 1, 0, 0);
-                glRotatef(angleY[5], 1, 0, 0);
+                glRotatef(angleY[15], 1, 0, 0);
                 glTranslatef(1, 0.21, 0);
                 glScalef(0.8f, 0.8f, 0.8f);
                 drawLeftHand(); //glutSolidTeapot( 0.3 );
@@ -322,13 +333,13 @@ void display()
         glPushMatrix();
             glTranslatef(0.1, 0.05, 0.25);
             glRotatef(angleX[6], 1, 0, 1);
-            glRotatef(angleY[6], 0, 1, 0);
+            glRotatef(angleY[16], 0, 1, 0);
             glTranslatef(0, -0.07, 0);
             drawRightLeg();
             glPushMatrix();
                 glTranslatef(-0.93, -0.58, -0.051);
                 glRotatef(angleX[7], 1, 0, 0);
-                glRotatef(angleY[7], 0, 1, 0);
+                glRotatef(angleY[17], 0, 1, 0);
                 glTranslatef(1, -0.07, 0.1);
                 glScalef(0.4f, 0.4f, 0.4f);
                 drawRightFoot(); //glutSolidTeapot( 0.3 );
@@ -337,13 +348,13 @@ void display()
         glPushMatrix();
             glTranslatef(-1.1, 0.05, 0.25);
             glRotatef(angleX[8], 1, 0, 1);
-            glRotatef(angleY[8], 0, 1, 0);
+            glRotatef(angleY[18], 0, 1, 0);
             glTranslatef(1, -0.07, 0);
             drawLeftLeg();
             glPushMatrix();
                 glTranslatef(-1.06, -0.72, 0.04);
                 glRotatef(angleX[9], 1, 0, 0);
-                glRotatef(angleY[9], 0, 1, 0);
+                glRotatef(angleY[19], 0, 1, 0);
                 glTranslatef(1, 0.07, 0);
                 glScalef(0.4f, 0.4f, 0.4f);
                 drawLeftFoot(); //glutSolidTeapot( 0.3 );
@@ -357,7 +368,7 @@ void display()
 
 ///void timer(int t){
 ///    glutTimerFunc(1000, timer, t+1);
-///    printf("≤{¶b∞_ß…:%d\n", t);
+///    printf("ÁèæÂú®Ëµ∑Â∫ä:%d\n", t);
 ///}
 
 int main(int argc, char *argv[])
