@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 
 GLUquadric * quad = NULL; ///todo: 要有一顆指標
-int id1, id2; //分開貼圖
+int id0, id1, id2, id3; //分開貼圖
 int myTexture(char * filename)
 {
     IplImage * img = cvLoadImage(filename); ///OpenCV讀圖
@@ -67,6 +67,7 @@ void drawHead(void)
     glmFacetNormals(Head);
     glmVertexNormals(Head, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id1);
     glmDraw(Head, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -79,6 +80,7 @@ void drawbody(void)
     glmFacetNormals(body);
     glmVertexNormals(body, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(body, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -91,6 +93,7 @@ void drawRightArm(void)
     glmFacetNormals(RightArm);
     glmVertexNormals(RightArm, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(RightArm, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -103,6 +106,7 @@ void drawRightHand(void)
     glmFacetNormals(RightHand);
     glmVertexNormals(RightHand, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(RightHand, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -115,6 +119,7 @@ void drawLeftArm(void)
     glmFacetNormals(LeftArm);
     glmVertexNormals(LeftArm, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(LeftArm, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -127,6 +132,7 @@ void drawLeftHand(void)
     glmFacetNormals(LeftHand);
     glmVertexNormals(LeftHand, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(LeftHand, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -139,6 +145,7 @@ void drawRightLeg(void)
     glmFacetNormals(RightLeg);
     glmVertexNormals(RightLeg, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(RightLeg, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -151,6 +158,7 @@ void drawRightFoot(void)
     glmFacetNormals(RightFoot);
     glmVertexNormals(RightFoot, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(RightFoot, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -163,6 +171,7 @@ void drawLeftLeg(void)
     glmFacetNormals(LeftLeg);
     glmVertexNormals(LeftLeg, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(LeftLeg, GLM_SMOOTH | GLM_TEXTURE);
 }
 
@@ -175,29 +184,28 @@ void drawLeftFoot(void)
     glmFacetNormals(LeftFoot);
     glmVertexNormals(LeftFoot, 90.0);
     }
+    glBindTexture(GL_TEXTURE_2D, id3);
     glmDraw(LeftFoot, GLM_SMOOTH | GLM_TEXTURE);
 }
 
 
 
-void myBody()
-{
-    glPushMatrix();
-        glColor3f(1, 0, 0);
-        glutSolidCube(0.6);
-    glPopMatrix();
-}
-
-//float angle = 1, da = 1;
 float angleX[10] = {}, angleY[10] = {};
 int angleID = 0;
 int oldX = 0, oldY = 0;
 #include <stdio.h>
 FILE * fin = NULL;
 FILE * fout = NULL;
+float teapotX = 0, teapotY = 0;
 void motion (int x, int y){
-    angleX[angleID] += y - oldY;
-    angleY[angleID] += x - oldX;
+    if(0){
+        teapotX += (x-oldX)/150.0;
+        teapotY -= (y-oldY)/150.0;
+        printf("glTranslatef(%.3f, %.3f, 0);\n", teapotX, teapotY);
+    }else{
+        angleX[angleID] += y - oldY;
+        angleY[angleID] += x - oldX;
+    }
     oldX = x;
     oldY = y;
     glutPostRedisplay();
@@ -263,37 +271,143 @@ void keyboard(unsigned char key, int x, int y){
     if(key=='7') angleID= 7;
     if(key=='8') angleID= 8;
     if(key=='9') angleID= 9;
-    if(key=='a') angleID= 111;
-    if(key=='x') angleID= 11;
-    if(key=='c') angleID= 12;
-    if(key=='v') angleID= 13;
-    if(key=='b') angleID= 14;
-    if(key=='n') angleID= 15;
-    if(key=='m') angleID= 16;
-    if(key==',') angleID= 17;
-    if(key=='.') angleID= 18;
-    if(key=='/') angleID= 19;
 }
 
+float angle = 0;
 void display()
 {
     //angle+=da;
     //if(angle>90) da = -1;
     //if(angle<0) da = +1;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDisable(GL_TEXTURE_2D);
-    //glutSolidSphere(0.1,30,30);
+    glEnable(GL_DEPTH_TEST);
+
+    glBindTexture(GL_TEXTURE_2D, id0);
+    glDisable(GL_LIGHTING);
     glPushMatrix();
-        glRotatef(angleX[0], 1, 0 ,0);
-        glRotatef(angleY[111], 0, 1 ,0);
+        glTranslatef(0, 1.5, -3);
+        glScalef(6.0f, 5.0f, 5.0f);
+        glBegin(GL_POLYGON);
+            glTexCoord2f(0, 0); glVertex2f(-1, +1);
+            glTexCoord2f(0, 1); glVertex2f(-1, -1);
+            glTexCoord2f(1, 1); glVertex2f(+1, -1);
+            glTexCoord2f(1, 0); glVertex2f(+1, +1);
+        glEnd();
+    glPopMatrix();
+
+    /*glBindTexture(GL_TEXTURE_2D, id1);
+    glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        glRotatef(angle++, 0, 0, 1);
+        gluSphere(quad, 0.5, 30, 30); ///glutSolidTeapot( 0.3 );
+    glPopMatrix();*/
+
+    glEnable(GL_LIGHTING);
+
+    glutSolidSphere(0.02,30,30);
+    glPushMatrix();
+        glRotatef(0, 0, 1, 0);
+        glRotatef(angleX[0], -1, 0, 0);
+        glRotatef(angleY[0], 0, 1, 0);
+        drawbody();
+        glPushMatrix();
+            glTranslatef(0.060, 1.17, 0.25);
+            glRotatef(angleX[1], 1, 0, 1);
+            glRotatef(angleX[1], 0, 1, 0);
+            glTranslatef(-0.060, -0.080, 0);
+            glScalef(0.8f, 0.8f, 0.8f);
+            glScalef(2.0f, 2.0f, 2.0f);
+            drawHead();
+        glPopMatrix();
+        glPushMatrix();
+            glPushMatrix();
+                glTranslatef(-0.253, 0.767, 0.247);///glTranslatef(teapotX, teapotY, 0);
+                //glTranslatef(-0.387, 0.647, 0.260);//glTranslatef(teapotX, teapotY, 0);
+                glRotatef(angleX[2], 1, 0, 1);
+                glRotatef(angleY[2], 0, 1, 0);
+                glTranslatef(-0.133, -0.120, 0);
+                glScalef(1.8f, 1.8f, 1.8f);
+                drawLeftArm();
+                glPushMatrix();
+                    glTranslatef(-0.100, -0.080, 0.060);
+                    glRotatef(angleX[3], 1, 0, 1);
+                    glRotatef(angleY[3], 0, 1, 0);
+                    glTranslatef(-0.060, -0.080, 0);
+                    glScalef(0.8f, 0.8f, 0.8f);
+                    drawLeftHand();
+                glPopMatrix();
+            glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glPushMatrix();
+                glTranslatef(0.387, 0.647, 0.260);//glTranslatef(teapotX, teapotY, 0);
+                glRotatef(angleX[4], 0, 0, 1);
+                glRotatef(angleY[4], 0, 1, 0);
+                glScalef(1.8f, 1.8f, 1.8f);
+                drawRightArm();
+                glPushMatrix();
+                    glTranslatef(0.220, -0.080, 0.060);
+                    glRotatef(angleX[5], 1, 0, 1);
+                    glRotatef(angleY[5], 0, 1, 0);
+                    glTranslatef(-0.060, -0.080, 0);
+                    glScalef(0.8f, 0.8f, 0.8f);
+                    drawRightHand();
+                glPopMatrix();
+            glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glPushMatrix();
+                glTranslatef(-0.127, 0.033, 0.253);//glTranslatef(teapotX, teapotY, 0);
+                glRotatef(angleX[6], 0, 0, 1);
+                glRotatef(angleY[6], 0, 1, 0);
+                glScalef(0.8f, 0.8f, 0.8f);
+
+                drawLeftLeg();
+                glPushMatrix();
+                    glTranslatef(-0.007, -0.573, 0.047);
+                    glRotatef(angleX[7], 1, 0, 1);
+                    glRotatef(angleY[7], 0, 1, 0);
+                    glTranslatef(-0.060, -0.080, 0);
+
+                    glScalef(0.4f, 0.4f, 0.4f);
+                    drawLeftFoot();
+                glPopMatrix();
+            glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glPushMatrix();
+                glTranslatef(0.133, 0.033, 0.253);//glTranslatef(teapotX, teapotY, 0);
+                glRotatef(angleX[8], 0, 0, 1);
+                glRotatef(angleY[8], 0, 1, 0);
+                glScalef(0.8f, 0.8f, 0.8f);
+                drawRightLeg();
+                glPushMatrix();
+                    glTranslatef(0.113, -0.580, 0.047);
+                    glRotatef(angleX[9], 1, 0, 1);
+                    glRotatef(angleY[9], 0, 1, 0);
+                    glTranslatef(-0.060, -0.080, 0);
+                    glScalef(0.4f, 0.4f, 0.4f);
+                    drawRightFoot();
+                glPopMatrix();
+            glPopMatrix();
+        glPopMatrix();
+
+    /*
+    glPushMatrix();
+        glRotatef(angleX[0], -1, 0 ,0);
+        glRotatef(angleY[111], 0, -1 ,0);
         drawbody();
         glEnable(GL_TEXTURE_2D);
         glColor3f(1,1,1);
 
         glPushMatrix();
             glTranslatef(0, -0.05, 0.3);
-            glRotatef(angleX[1], 1, 0, 0);
-            glRotatef(angleY[11], 0, 0, 1);
+            glRotatef(angleX[1], 1, 0, 1);
+            glRotatef(angleY[11], 1, 0, 0);
+            glRotatef(0, 0, 1, 0);
             glTranslatef(0, 1.17, 0);
             glScalef(2.0f, 2.0f, 2.0f);
             drawHead(); //glutSolidTeapot( 0.3 );
@@ -301,7 +415,7 @@ void display()
         glPushMatrix();
             glTranslatef(0.35, 0.73, -0.75);
             glRotatef(angleX[2], 1, 0, 1);
-            glRotatef(angleY[12], 0, 1, 0);
+            glRotatef(angleY[12], 1, 0, 0);
             glTranslatef(0, -0.07, 1);
             glScalef(1.8f, 1.8f, 1.8f);
             drawRightArm();
@@ -360,10 +474,22 @@ void display()
                 drawLeftFoot(); //glutSolidTeapot( 0.3 );
             glPopMatrix();
         glPopMatrix();
-            glPopMatrix();
-        glPopMatrix();
-
+    glPopMatrix();
+        */
+    glPopMatrix();
     glutSwapBuffers();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    float ar = w / (float) h;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective( 60, ar, 0.01, 100 );
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt( 0, 0, 2.5, 0, 0, 0, 0, 1, 0 );
 }
 
 ///void timer(int t){
@@ -371,25 +497,31 @@ void display()
 ///    printf("現在起床:%d\n", t);
 ///}
 
+
+
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(500,500);
+    glutInitWindowSize(900,500);
 	glutCreateWindow("HW");
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
 	glutMouseFunc(mouse);
 	glutMotionFunc(motion);
 	glutKeyboardFunc(keyboard);
+	glutReshapeFunc(reshape);
 	///glutTimerFunc(0, timer, 0);
 
-	//myTexture("data/Diffuse.jpg");
+    id0 = myTexture("data/nightRoof.jpg");
+    id1 = myTexture("data/head.jpg");
+    id2 = myTexture("data/leg.jpg");
+    id3 = myTexture("data/torso.jpg");
 
 	const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
     const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
     const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    const GLfloat light_position[] = { 2.0f, 5.0f, -5.0f, 0.0f };
+    const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
     const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
     const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
@@ -413,8 +545,11 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
 
- glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
- glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+
+    quad = gluNewQuadric(); ///todo:把這顆指標,指好
+    gluQuadricTexture(quad, 0);///todo: 做好地球的貼圖
 
 	glutMainLoop();
 }
